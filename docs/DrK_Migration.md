@@ -1,6 +1,8 @@
-# Migrating from DoctorKafka to Orion
+# Migrating from [DoctorKafka](https://github.com/pinterest/doctorkafka) to Orion
 
-Currently only AWS EC2 replacements are supported. Auto-rebalancing isn't implemented in Orion yet since we have migrated to static rebalancing techniques which have shown higher stability in production.
+If you were previously using DoctorKafka, here are the instructions for migrating from DoctorKafka to Orion.
+
+Note: Currently only AWS EC2 replacements are supported. Auto-rebalancing isn't implemented in Orion yet since we have migrated to static rebalancing techniques which as they have higher stability in production.
 
 ## Requirements:
 1. Orion-compatible agents need to be installed on the brokers and configured to communicate with the Orion Server

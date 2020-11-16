@@ -46,7 +46,7 @@ Example:
 - Maintain settings e.g. monitor and fix topic configurations in Kafka
 
 ## Architecture
-![Image of Orion's Architecture](images/Arch1.png)
+![Image of Orion's Architecture](docs/images/orion-architecture.png)
 
 
 ## Quick Start
@@ -70,7 +70,7 @@ Build scripts for Ubuntu are provided. The build script will attempt to install 
 
 
 ### Dr.Kafka to Orion Migration
-If you were previously using Dr.Kafka you can find instructions on migrating to Orion here
+If you were previously using Dr.Kafka you can find instructions on migrating to Orion [here](docs/DrK_Migration.md)
 
 ## Maintainers
 
