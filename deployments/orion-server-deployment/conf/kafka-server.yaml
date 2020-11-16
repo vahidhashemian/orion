@@ -53,7 +53,7 @@ actionAuditorConfigs:
   enabled: true
 
 clusterConfigs:
-  - clusterId: testkafka03
+  - clusterId: testkafka
     type: kafka
     configuration:
       serversetPath: /var/serverset/discovery.testkafka.prod

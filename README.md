@@ -51,22 +51,7 @@ Example:
 
 ## Quick Start
 
-**Build**
-
-```
-git clone https://github.com/pinterest/orion.git
-cd orion
-bash ./builds/build-deployment.sh
-# Agent artifact will be generated in deployments/orion-agent-deployment/target/orion-agent_x.x.x_all.deb
-# Server artifact will be generated in deployments/orion-server-deployment/target/orion-server-deployment-x.x.x-bin.tar.gz
-# Note: Agent jar is generated as well if you would like to use custom scripts
-```
-
-Build scripts for Ubuntu are provided. The build script will attempt to install pre-requisites. If they don't work for your environment the following are needed to build Orion:
-
-- OpenJDK8
-- nodejs12/npm
-- Maven 3+
+Detailed quick install can be found [here](docs/QuickStart.md)
 
 
 ### Dr.Kafka to Orion Migration
