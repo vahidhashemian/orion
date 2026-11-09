@@ -169,10 +169,11 @@ public class KafkaTopicSensor extends KafkaSensor {
               numPartition,
               metricsTags
       );
-      // Retention
+      // Retention. A gauge publishes one series, orion.server.kafka.topic.retention.ms,
+      // instead of the histogram suffixes (.max, .avg, .p90, .p99, .count).
       long retentionMs= Long.parseLong(
               topicDescription.getTopicConfigs().getOrDefault("retention.ms", "0.0"));
-      OrionServer.metricsHistogram(
+      OrionServer.metricsGaugeNum(
               "kafka.topic.retention.ms",
               retentionMs,
               metricsTags

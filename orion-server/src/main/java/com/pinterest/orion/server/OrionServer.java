@@ -18,6 +18,8 @@ package com.pinterest.orion.server;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -84,6 +86,28 @@ public class OrionServer extends Application<OrionConf> {
   private ClusterManager mgr;
   private HeartbeatService heartbeatService = new HeartbeatService();
   public static final MetricRegistry METRICS = SharedMetricRegistries.setDefault("METRICS");
+  private static final ConcurrentMap<MetricName, MutableGauge> GAUGES = new ConcurrentHashMap<>();
+
+  /**
+   * A gauge whose value can be replaced. Dropwizard registers a gauge once per name,
+   * so the registered instance has to keep the latest value itself.
+   */
+  private static final class MutableGauge implements Gauge<Double> {
+    private volatile double value;
+
+    private MutableGauge(double value) {
+      this.value = value;
+    }
+
+    private void set(double value) {
+      this.value = value;
+    }
+
+    @Override
+    public Double getValue() {
+      return value;
+    }
+  }
 
   @Override
   public void initialize(Bootstrap<OrionConf> bootstrap) {
@@ -316,14 +340,21 @@ public class OrionServer extends Application<OrionConf> {
   }
 
   /**
-   * Static helper class doing metrics.gauge for Orion Server metrics.
+   * Publish one numeric gauge. Later calls with the same name and tags replace the value.
+   * The OpenTSDB name is the metrics prefix plus {@code name}, with no histogram suffixes.
    * @param name The name of the metric
    * @param value The value of the metric
    * @param tagMap The tag map of the metric
    */
   public static void metricsGaugeNum(String name, double value, Map<String, String> tagMap) {
     try {
-      METRICS.gauge(new MetricName(name, tagMap), () -> (Gauge<Double>) () -> value);
+      MetricName metricName = new MetricName(name, tagMap);
+      MutableGauge gauge = GAUGES.computeIfAbsent(metricName, key -> {
+        MutableGauge created = new MutableGauge(value);
+        METRICS.gauge(key, () -> created);
+        return created;
+      });
+      gauge.set(value);
     } catch (Exception e) {
       logger.log(Level.WARNING, "ActionEngine failed to run tsdb metrics gauge. Error: ", e);
     }
